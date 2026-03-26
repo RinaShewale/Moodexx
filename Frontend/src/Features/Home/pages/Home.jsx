@@ -34,7 +34,7 @@ export default function Home() {
 
   const userMoodKey = user ? `${user.username}_moodHistory` : "moodHistory";
   const playedSongsKey = user ? `${user.username}_playedSongs` : "playedSongs";
-  const uploadedSongsKey = "uploadedSongs";
+  const uploadedSongsKey = user ? `${user.username}_uploadedSongs` : "uploadedSongs";
   const latestSongKey = user ? `${user.username}_latestSong` : "latestSong";
   const notificationKey = user ? `${user.username}_notifications` : "notifications";
 
@@ -42,9 +42,7 @@ export default function Home() {
 
   const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem(userMoodKey) || "[]"));
   const [playedSongs, setPlayedSongs] = useState(() => JSON.parse(localStorage.getItem(playedSongsKey) || "[]"));
-  const [uploadedSongs, setUploadedSongs] = useState(() =>
-    JSON.parse(localStorage.getItem(uploadedSongsKey) || "[]")
-  );
+  const [uploadedSongs, setUploadedSongs] = useState(() => JSON.parse(localStorage.getItem(uploadedSongsKey) || "[]"));
   const [currentSong, setCurrentSong] = useState(() => JSON.parse(localStorage.getItem(latestSongKey) || "null"));
   const [today, setToday] = useState(new Date().toISOString().split("T")[0]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -292,4 +290,4 @@ export default function Home() {
       </div>
     </div>
   );
-}
+}    
