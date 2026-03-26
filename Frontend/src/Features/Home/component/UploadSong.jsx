@@ -24,7 +24,7 @@ const UploadSong = ({ onUpload }) => {
       setProgress(0);
 
       const res = await axios.post(
-        "https://moodex.onrender.com/api/song",
+        "https://moodexx.onrender.com/api/song",
         data,
         {
           onUploadProgress: (progressEvent) => {
