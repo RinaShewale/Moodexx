@@ -1,0 +1,510 @@
+/* ================= ROOT ================= */
+.music-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #0a0118;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ================= LEFT SIDEBAR ================= */
+.left-sidebar {
+  width: 250px;
+  background: linear-gradient(to bottom, #1a0b2e, #0f0520);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: left 0.3s ease, transform 0.3s ease;
+  align-items: center;
+
+
+
+  .user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-right: 20px;
+
+    .avatar {
+      width: 93px;
+      height: 89px;
+      background: linear-gradient(135deg, #a855f7, #9333ea);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .username {
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      text-transform: capitalize;
+      margin-right: 20px;
+    }
+  }
+
+  /* ================= MENU SECTION ================= */
+  .menu-section,
+  .library-section {
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      color: #c084fc;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 25px;
+
+      button {
+        color: #9ca3af;
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        line-height: 1.8;
+        padding: 8px 10px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: #fff;
+          background-color: rgba(168, 85, 247, 0.2);
+        }
+
+        &.active {
+          color: #c084fc;
+        }
+      }
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      background: rgba(146, 51, 234, 0.76);
+      border: none;
+      padding: 0.7rem 2rem;
+      border-radius: 20px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+  }
+}
+
+/* ================= MOBILE MENU BUTTON ================= */
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  z-index: 1100;
+  cursor: pointer;
+}
+
+/* ================= MAIN CONTENT ================= */
+
+.main-content {
+  flex: 1;
+  padding: 25px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100vh;
+  box-sizing: border-box;
+
+  /* for Webkit browsers (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    width: 0px; /* hides the scrollbar completely */
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* for Firefox */
+  scrollbar-width: thin; /* options: auto | thin | none */
+  scrollbar-color: transparent transparent;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    border-bottom: 1px solid #a955f761;
+
+    h1 {
+      font-size: 28px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a855f7, #f472b6);
+      /* gradient text */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+      /* slightly spaced for elegance */
+      margin-bottom: 20px;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    /* subtle hover effect */
+    h1:hover {
+      transform: scale(1.05);
+      /* slight pop on hover */
+      filter: drop-shadow(0 4px 6px rgba(168, 85, 247, 0.4));
+      /* soft glow effect */
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      .notification-btn {
+        position: relative;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+
+        svg {
+          color: #fff;
+        }
+
+        .notification-badge {
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          background: #ef4444;
+          color: #fff;
+          font-size: 10px;
+          font-weight: bold;
+          padding: 2px 6px;
+          border-radius: 50%;
+          min-width: 16px;
+          text-align: center;
+        }
+      }
+
+      .search-wrapper {
+        display: flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 8px 12px;
+        border-radius: 10px;
+        gap: 8px;
+
+        input {
+          background: transparent;
+          border: none;
+          outline: none;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+/* ================= MOOD DETECTION ================= */
+.mood-detection-banner {
+  background: transparent;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+/* ================= PLAYLIST ================= */
+.playlist-section {
+  margin-bottom: 30px;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .see-more-btn {
+      background: none;
+      border: none;
+      color: #c084fc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .playlist-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+
+    .playlist-card {
+      padding: 15px;
+      border-radius: 15px;
+      position: relative;
+
+      h4 {
+        margin-bottom: 5px;
+      }
+
+      .play-btn {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: #fff;
+        color: #000;
+        border: none;
+        border-radius: 50%;
+        padding: 8px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+/* ================= MOOD GRAPH ================= */
+.mood-graph-section {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 20px;
+  border-radius: 15px;
+
+  h3 {
+    margin-bottom: 15px;
+  }
+}
+
+/* ================= RIGHT SIDEBAR ================= */
+.right-sidebar {
+  width: 350px;
+  background: linear-gradient(to bottom, #1a0b2e, #0f0520);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: #fff;
+  height: 100vh;
+
+  .player-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .mood-song-list {
+    margin-top: 20px;
+
+    h4 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #c084fc;
+    }
+
+    .playlist-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      button {
+        padding: 10px 12px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        text-align: left;
+        font-size: 14px;
+        color: #fff;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: rgba(168, 85, 247, 0.3);
+        }
+
+        &.active {
+          background-color: #a855f7;
+          color: #fff;
+        }
+      }
+    }
+
+    p {
+      margin-top: 10px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  }
+}
+
+/* ================= SCROLLBARS ================= */
+.right-sidebar::-webkit-scrollbar,
+.main-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.right-sidebar::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb {
+  background: #9233ea55;
+  border-radius: 10px;
+}
+
+.graph-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Small tablets */
+@media (max-width: 1024px) {
+  .music-dashboard {
+    flex-direction: column;
+  }
+
+  .left-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  .playlist-section .playlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .mood-graph-section {
+    padding: 15px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 768px) {
+  .music-dashboard {
+    flex-direction: column;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+    position: fixed;
+    top: 18px;
+    right: 15px;
+    z-index: 1100;
+  }
+
+  .left-sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    z-index: 1050;
+    background: linear-gradient(to bottom, #1a0b2e, #0f0520);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+
+    &.open {
+      left: 0;
+    }
+
+    .user-profile {
+      display: none;
+    }
+
+    nav {
+      gap: 10px;
+      overflow-x: auto;
+    }
+
+    .logout-btn {
+      padding: 0.5rem 1.5rem;
+      font-size: 12px;
+    }
+  }
+
+  .main-content {
+    padding: 10px;
+    margin-left: 0;
+    z-index: 100;
+    position: relative;
+  }
+
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .main-content .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: 10px;
+    margin: 0;
+
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      flex-shrink: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      margin-right: 52px;
+      margin-top: 7px;
+
+      .notification-btn,
+      .search-wrapper {
+        width: auto;
+      }
+    }
+  }
+
+  .mood-graph-section {
+    padding: 10px;
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 20px;
+    }
+
+    .graph-wrapper {
+      overflow-x: auto;
+    }
+  }
+}

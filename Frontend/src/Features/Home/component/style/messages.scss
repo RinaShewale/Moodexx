@@ -1,0 +1,143 @@
+.recommendation-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: #0a0118;
+  color: #fff;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+
+  .user-greeting {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 2rem;
+      color: #c084fc;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #9ca3af;
+
+      strong {
+        color: #fff;
+      }
+    }
+  }
+
+  .quote-box {
+    background: rgba(146, 51, 234, 0.3);
+    border: 1px solid #9333ea;
+    padding: 2rem;
+    border-radius: 15px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #fff;
+    animation: fadeIn 1s ease;
+    position: relative;
+    /* changed from absolute */
+    margin-top: 6rem;
+    /* spacing below greeting */
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .back-btn {
+    background-color: rgba(146, 51, 234, 0.76);
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0.7rem 2.5rem;
+    border-radius: 20px;
+    position: fixed;
+    /* 🔑 use fixed so it’s always on top */
+    top: 1rem;
+    right: 1rem;
+    z-index: 999;
+    /* 🔑 ensures it’s above other elements */
+    transition: 0.2s;
+
+    &:hover {
+      background-color: rgba(146, 51, 234, 0.9);
+    }
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+  .recommendation-page .quote-box {
+    font-size: 1.1rem;
+    padding: 1.8rem;
+  }
+
+  .back-btn {
+    padding: 0.6rem 2rem;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recommendation-page .quote-box {
+    font-size: 1rem;
+    padding: 1.5rem;
+  }
+
+  .user-greeting h2 {
+    font-size: 1.6rem;
+  }
+
+  .user-greeting p {
+    font-size: 1rem;
+  }
+
+  .back-btn {
+    top: 0.8rem;
+    right: 1rem;
+    padding: 0.5rem 2rem;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recommendation-page .quote-box {
+    font-size: 0.95rem;
+    padding: 1.2rem;
+  }
+
+  .user-greeting h2 {
+    font-size: 1.4rem;
+    margin-top: 70px;
+  }
+
+  .user-greeting p {
+    font-size: 0.9rem;
+  }
+
+  .back-btn {
+    top: 0.5rem;
+    right: 0.8rem;
+    padding: 0.4rem 1.8rem;
+    font-size: 11px;
+  }
+}

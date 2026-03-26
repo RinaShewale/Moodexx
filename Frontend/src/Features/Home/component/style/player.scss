@@ -1,0 +1,133 @@
+.large-player {
+  background: linear-gradient(to bottom right, #581c87, #3b0764);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 90%;              /* responsive width */
+  max-width: 400px;        /* prevent too wide on large screens */
+  margin: 1rem auto;       /* center horizontally */
+  color: #fff;
+  box-sizing: border-box;
+
+  .player-poster {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .player-song-info {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+    p {
+      font-size: 1rem;
+      color: #d8b4fe;
+      margin: 0;
+    }
+  }
+
+  .player-progress {
+    margin-bottom: 1rem;
+
+    .time {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+    input.progress-bar-input {
+      width: 100%;
+      cursor: pointer;
+    }
+  }
+
+  .player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+
+    button {
+      background: none;
+      border: none;
+      color: #c084fc;
+      cursor: pointer;
+      transition: 0.2s;
+      &:hover { color: #ffffff; }
+
+      &.play-btn {
+        width: 56px;
+        height: 56px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover { transform: scale(1.1); }
+        svg { width: 28px; height: 28px; color: #9333ea; }
+      }
+    }
+  }
+}
+
+/* MEDIA QUERIES FOR SMALL DEVICES */
+@media (max-width: 480px) {
+  .large-player {
+    padding: 1rem;
+  }
+
+  .player-song-info h3 {
+    font-size: 1rem;
+  }
+
+  .player-song-info p {
+    font-size: 0.875rem;
+  }
+
+  .player-controls button.play-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .player-controls button.play-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .large-player {
+    padding: 1.25rem;
+  }
+
+  .player-song-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .player-song-info p {
+    font-size: 0.9rem;
+  }
+
+  .player-controls button.play-btn {
+    width: 52px;
+    height: 52px;
+  }
+
+  .player-controls button.play-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+}
