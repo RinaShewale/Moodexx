@@ -15,20 +15,16 @@ const Register = () => {
   const { loading, handleRegister } = useAuth()
   const navigate = useNavigate()
 
-  // 🔐 Strong Password Regex (uppercase, lowercase, number, special char)
-  const passwordRegex =
-    /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/
 
   async function handleSubmit(e) {
     e.preventDefault()
 
-    // ❌ Basic email validation
     if (!email.includes("@")) {
       setError("Invalid email")
       return
     }
 
-    // ❌ Strong password validation
     if (!passwordRegex.test(password)) {
       setError("Password must have uppercase, number & special character")
       return
@@ -37,18 +33,13 @@ const Register = () => {
     setError("")
 
     try {
-      // ✅ Fixed: handleRegister now returns response
       const res = await handleRegister({ username, email, password })
-      console.log("REGISTER RESPONSE:", res)
-
       if (!res?.success) {
         setError(res?.message || "Register failed")
         return
       }
-
       alert("Register Success 🎉")
       navigate("/")
-
     } catch (err) {
       console.error(err)
       setError("Something went wrong")
@@ -60,33 +51,39 @@ const Register = () => {
       <div className="formcontainer">
         <h1>Register</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
 
+          {/* USERNAME */}
           <FormGroup
             label="Username"
             placeholder="Enter your username"
-            value={username}
+            value={username || ""}
             onChange={(e) => setUsername(e.target.value)}
+            autoComplete="off"
           />
 
+          {/* EMAIL */}
           <FormGroup
             label="Email"
             placeholder="Enter your email"
-            value={email}
+            value={email || ""}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="off"
           />
 
-          {/* 🔐 PASSWORD */}
+          {/* PASSWORD */}
           <div style={{ position: "relative" }}>
             <FormGroup
               label="Password"
               placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
-              value={password}
+              value={password || ""}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+              name="new-password"
             />
 
-            {/* 👁 ICON */}
+            {/* 👁 Password toggle */}
             <span
               onClick={() => setShowPassword(!showPassword)}
               style={{
@@ -101,7 +98,7 @@ const Register = () => {
             </span>
           </div>
 
-          {/* ❌ ERROR */}
+          {/* ERROR */}
           {error && (
             <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
           )}

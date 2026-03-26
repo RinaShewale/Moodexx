@@ -6,26 +6,21 @@ import { useAuth } from '../hook/useauth';
 import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
-
   const { loading, handleLogin } = useAuth();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // ❌ Email validation
     if (!email.includes("@")) {
       setError("Invalid email");
       return;
     }
 
-    // ❌ Password empty check
     if (!password) {
       setError("Password is required");
       return;
@@ -38,13 +33,11 @@ const Login = () => {
 
       console.log("LOGIN RESPONSE:", res);
 
-      // ❌ FIX: remove strict success check
       if (!res) {
         setError("Login failed");
         return;
       }
 
-      // ✅ optional: token store
       if (res.token) {
         localStorage.setItem("token", res.token);
       }
@@ -62,26 +55,30 @@ const Login = () => {
       <div className="formcontainer">
         <h1>Login</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
 
+          {/* EMAIL */}
           <FormGroup
             label="Email"
             placeholder="Enter your email"
-            value={email}
+            value={email || ""}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="off"
           />
 
-          {/* 🔐 PASSWORD */}
+          {/* PASSWORD */}
           <div style={{ position: "relative" }}>
             <FormGroup
               label="Password"
               placeholder="Enter your password"
-              type={showPassword ? "text" : "password"} // ✅ FIX works only if FormGroup fixed
-              value={password}
+              type={showPassword ? "text" : "password"}
+              value={password || ""}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+              name="new-password"
             />
 
-            {/* 👁 ICON */}
+            {/* 👁 Password toggle */}
             <span
               onClick={() => setShowPassword(!showPassword)}
               style={{
@@ -96,7 +93,7 @@ const Login = () => {
             </span>
           </div>
 
-          {/* ❌ ERROR */}
+          {/* ERROR */}
           {error && (
             <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
           )}
