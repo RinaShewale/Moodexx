@@ -23,8 +23,15 @@ const Register = () => {
   async function handleSubmit(e) {
     e.preventDefault()
 
+    // ❌ Email validation
+    if (!email.includes("@")) {
+      setError("Invalid email")
+      return
+    }
+
+    // ❌ Password validation
     if (!passwordRegex.test(password)) {
-      setError("Weak password (use uppercase, number, special char)")
+      setError("Password must have uppercase, number & special character")
       return
     }
 
@@ -33,15 +40,19 @@ const Register = () => {
     try {
       const res = await handleRegister({ username, email, password })
 
-      if (!res || !res.success) {
-        alert(res?.message || "Register failed")
+      console.log("REGISTER RESPONSE:", res)
+
+      if (!res) {
+        alert("Register failed")
         return
       }
 
+      alert("Register Success 🎉")
       navigate("/")
+
     } catch (err) {
       console.error(err)
-      alert("Something went wrong")
+      setError("Something went wrong")
     }
   }
 
@@ -51,6 +62,7 @@ const Register = () => {
         <h1>Register</h1>
 
         <form onSubmit={handleSubmit}>
+
           <FormGroup
             label="Username"
             placeholder="Enter your username"
@@ -70,7 +82,7 @@ const Register = () => {
             <FormGroup
               label="Password"
               placeholder="Enter your password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? "text" : "password"}  // ✅ FIX
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -98,11 +110,13 @@ const Register = () => {
           <button className='primarybutton' type="submit">
             {loading ? "Registering..." : "Register"}
           </button>
+
         </form>
 
         <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>
+
       </div>
     </main>
   )
