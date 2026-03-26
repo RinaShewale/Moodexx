@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import FormGroup from '../components/FormGroup';
+import React, { useState, useEffect } from "react";
+import FormGroup from "../components/FormGroup";
 import "../Style/loginform.scss";
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hook/useauth';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../hook/useauth";
 import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
@@ -15,15 +15,21 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  // 🔹 RESET STATE ON MOUNT (prevents autofill ghost text)
+  // 🔹 Randomized input names to prevent browser autofill
+  const [emailName] = useState(`email-${Math.random()}`);
+  const [passwordName] = useState(`password-${Math.random()}`);
+
+  // 🔹 RESET STATE ON MOUNT (prevents ghost autofill)
   useEffect(() => {
     setEmail("");
     setPassword("");
     setError("");
   }, []);
 
+  // 🔹 HANDLE LOGIN SUBMIT
   async function handleSubmit(e) {
     e.preventDefault();
+
     if (!email.includes("@")) {
       setError("Invalid email");
       return;
@@ -56,6 +62,19 @@ const Login = () => {
         <h1>Login</h1>
 
         <form onSubmit={handleSubmit} autoComplete="off">
+          {/* 🔹 Hidden fake fields to trick browser autofill */}
+          <input
+            type="text"
+            name="fakeuser"
+            autoComplete="username"
+            style={{ display: "none" }}
+          />
+          <input
+            type="password"
+            name="fakepass"
+            autoComplete="new-password"
+            style={{ display: "none" }}
+          />
 
           {/* EMAIL */}
           <FormGroup
@@ -64,6 +83,7 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="off"
+            name={emailName} // randomized name prevents browser autofill
           />
 
           {/* PASSWORD */}
@@ -75,7 +95,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
-              name="new-password"
+              name={passwordName} // randomized name prevents autofill
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
@@ -84,7 +104,7 @@ const Login = () => {
                 right: "15px",
                 top: "38px",
                 cursor: "pointer",
-                color: "#aaa"
+                color: "#aaa",
               }}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
