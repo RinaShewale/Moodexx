@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import FormGroup from '../components/FormGroup'
 import "../Style/registerform.scss"
 import { Link, useNavigate } from 'react-router-dom'
@@ -6,14 +6,23 @@ import { useAuth } from '../hook/useauth'
 import { Eye, EyeOff } from "lucide-react"
 
 const Register = () => {
+  const { loading, handleRegister } = useAuth()
+  const navigate = useNavigate()
+
+  // 🔹 STATE
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
 
-  const { loading, handleRegister } = useAuth()
-  const navigate = useNavigate()
+  // 🔹 RESET STATE ON MOUNT
+  useEffect(() => {
+    setUsername("")
+    setEmail("")
+    setPassword("")
+    setError("")
+  }, [])
 
   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/
 
@@ -38,8 +47,10 @@ const Register = () => {
         setError(res?.message || "Register failed")
         return
       }
+
       alert("Register Success 🎉")
       navigate("/")
+
     } catch (err) {
       console.error(err)
       setError("Something went wrong")
@@ -57,7 +68,7 @@ const Register = () => {
           <FormGroup
             label="Username"
             placeholder="Enter your username"
-            value={username || ""}
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="off"
           />
@@ -66,7 +77,7 @@ const Register = () => {
           <FormGroup
             label="Email"
             placeholder="Enter your email"
-            value={email || ""}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="off"
           />
@@ -77,13 +88,12 @@ const Register = () => {
               label="Password"
               placeholder="Enter your password"
               type={showPassword ? "text" : "password"}
-              value={password || ""}
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
               name="new-password"
             />
 
-            {/* 👁 Password toggle */}
             <span
               onClick={() => setShowPassword(!showPassword)}
               style={{
@@ -99,20 +109,16 @@ const Register = () => {
           </div>
 
           {/* ERROR */}
-          {error && (
-            <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
-          )}
+          {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
 
           <button className='primarybutton' type="submit">
             {loading ? "Registering..." : "Register"}
           </button>
-
         </form>
 
         <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>
-
       </div>
     </main>
   )
