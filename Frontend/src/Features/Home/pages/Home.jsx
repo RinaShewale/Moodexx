@@ -16,6 +16,7 @@ const moodEmoji = {
   calm: "😌",
   neutral: "😐",
   surprised: "😲",
+
 };
 
 const getArtistsFromHistory = (playedSongs) => {
@@ -33,9 +34,11 @@ export default function Home() {
 
   const userMoodKey = user ? `${user.username}_moodHistory` : "moodHistory";
   const playedSongsKey = user ? `${user.username}_playedSongs` : "playedSongs";
-  const uploadedSongsKey = "uploadedSongs"; // ✅ global for all users
+  const uploadedSongsKey = "uploadedSongs";
   const latestSongKey = user ? `${user.username}_latestSong` : "latestSong";
   const notificationKey = user ? `${user.username}_notifications` : "notifications";
+
+
 
   const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem(userMoodKey) || "[]"));
   const [playedSongs, setPlayedSongs] = useState(() => JSON.parse(localStorage.getItem(playedSongsKey) || "[]"));
@@ -47,10 +50,12 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toastLock, setToastLock] = useState(false);
 
+  // 🔔 Notification state
   const [notificationCount, setNotificationCount] = useState(() => {
     return parseInt(localStorage.getItem(notificationKey)) || 0;
   });
 
+  // 🔒 Time lock (NEW FIX)
   const [lastTriggerTime, setLastTriggerTime] = useState(0);
 
   useEffect(() => {
@@ -63,14 +68,14 @@ export default function Home() {
 
   useEffect(() => { localStorage.setItem(userMoodKey, JSON.stringify(history)); }, [history, user]);
   useEffect(() => { localStorage.setItem(playedSongsKey, JSON.stringify(playedSongs)); }, [playedSongs, user]);
-  useEffect(() => { localStorage.setItem(uploadedSongsKey, JSON.stringify(uploadedSongs)); }, [uploadedSongs]);
-
   useEffect(() => {
     const handleFocus = () => {
       const saved = parseInt(localStorage.getItem(notificationKey)) || 0;
       setNotificationCount(saved);
     };
+
     window.addEventListener("focus", handleFocus);
+
     return () => window.removeEventListener("focus", handleFocus);
   }, [notificationKey]);
 
@@ -93,9 +98,10 @@ export default function Home() {
       if (!user || !mood || mood === "Detecting...") return;
 
       const nowTime = Date.now();
-      if (nowTime - lastTriggerTime < 2000) return;
+      if (nowTime - lastTriggerTime < 2000) return; // 2 sec lock
       setLastTriggerTime(nowTime);
 
+      // Mood history update
       const now = new Date();
       const hours = now.getHours() % 12 || 12;
       const minutes = now.getMinutes().toString().padStart(2, "0");
@@ -107,15 +113,17 @@ export default function Home() {
       setHistory(prev => [newEntry, ...prev]);
       localStorage.setItem("latestMood", mood);
 
-      // ✅ Use global uploadedSongs for all users
+      // Play matching song
       const allSongs = [...uploadedSongs, ...playedSongs];
       const song = allSongs.find(s => s.mood?.toLowerCase() === mood.toLowerCase());
       if (song) handlePlaySong(song);
 
+      // 🔔 Increment notification dot (localStorage + state)
       const updatedCount = (parseInt(localStorage.getItem(notificationKey)) || 0) + 1;
       localStorage.setItem(notificationKey, updatedCount);
       setNotificationCount(updatedCount);
 
+      // ✅ Show toast only if not already showing
       if (!toastLock) {
         setToastLock(true);
         toast.info("You have something interesting! Please check Messages.", {
@@ -133,31 +141,12 @@ export default function Home() {
             fontWeight: "bold",
             boxShadow: "0 0 10px rgba(168,85,247,0.5)",
           },
-          onClose: () => setToastLock(false),
+          onClose: () => setToastLock(false), // unlock after toast closes
         });
       }
     },
     [user, uploadedSongs, playedSongs, handlePlaySong, lastTriggerTime, toastLock]
   );
-
-  const handleUploadSong = (song) => {
-    if (!song) return;
-    const newSong = {
-      ...song,
-      uploadedBy: user?.username || "Guest",
-      id: Date.now(),
-    };
-    setUploadedSongs(prev => {
-      const updated = [...prev, newSong];
-      localStorage.setItem(uploadedSongsKey, JSON.stringify(updated));
-      return updated;
-    });
-    toast.success(`Song "${song.title}" uploaded successfully! 🎵`, {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
-
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -229,8 +218,13 @@ export default function Home() {
             <button
               className="notification-btn"
               onClick={() => {
+                // ✅ force sync
                 localStorage.setItem(notificationKey, "0");
+
+                // ✅ update state AFTER storage
                 setNotificationCount(0);
+
+                // ✅ small delay ensures UI update
                 setTimeout(() => {
                   navigate("/messages", { replace: true });
                 }, 50);
@@ -285,11 +279,11 @@ export default function Home() {
                 ).values()
               ).map((song) => (
                 <button
-                  key={song.id}
+                  key={song._id}
                   onClick={() => setCurrentSong(song)}
-                  className={currentSong.id === song.id ? "active" : ""}
+                  className={currentSong._id === song._id ? "active" : ""}
                 >
-                  {song.title} {song.uploadedBy ? `by ${song.uploadedBy}` : ""}
+                  {song.title}
                 </button>
               ))}
             </div>
