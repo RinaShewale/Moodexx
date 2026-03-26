@@ -1,49 +1,55 @@
 import React, { useState } from 'react';
 import FormGroup from '../components/FormGroup';
-import "../Style/registerform.scss";
+import "../Style/loginform.scss";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hook/useauth';
 import { Eye, EyeOff } from "lucide-react";
 
-const Register = () => {
-  const [username, setUsername] = useState("");
+const Login = () => {
+
+  const { loading, handleLogin } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  const { loading, handleRegister } = useAuth();
   const navigate = useNavigate();
-
-  // 🔐 Strong Password Regex
-  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/;
 
   async function handleSubmit(e) {
     e.preventDefault();
 
+    // ❌ Email validation
     if (!email.includes("@")) {
       setError("Invalid email");
       return;
     }
 
-    if (!passwordRegex.test(password)) {
-      setError("Password must have uppercase, number & special character");
+    // ❌ Password empty check
+    if (!password) {
+      setError("Password is required");
       return;
     }
 
     setError("");
 
     try {
-      const res = await handleRegister({ username, email, password });
-      console.log("REGISTER RESPONSE:", res);
+      const res = await handleLogin({ email, password });
 
-      if (!res?.success) {
-        setError(res?.message || "Register failed");
+      console.log("LOGIN RESPONSE:", res);
+
+      // ❌ FIX: remove strict success check
+      if (!res) {
+        setError("Login failed");
         return;
       }
 
-      // ✅ Navigate to dashboard after successful register
-      navigate("/dashboard");
+      // ✅ optional: token store
+      if (res.token) {
+        localStorage.setItem("token", res.token);
+      }
+
+      navigate("/");
 
     } catch (err) {
       console.error(err);
@@ -52,17 +58,11 @@ const Register = () => {
   }
 
   return (
-    <main className="RegisterPage">
+    <main className="LoginPage">
       <div className="formcontainer">
-        <h1>Register</h1>
+        <h1>Login</h1>
 
         <form onSubmit={handleSubmit}>
-          <FormGroup
-            label="Username"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
 
           <FormGroup
             label="Email"
@@ -71,35 +71,48 @@ const Register = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          {/* 🔐 PASSWORD */}
           <div style={{ position: "relative" }}>
             <FormGroup
               label="Password"
               placeholder="Enter your password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? "text" : "password"} // ✅ FIX works only if FormGroup fixed
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            {/* 👁 ICON */}
             <span
               onClick={() => setShowPassword(!showPassword)}
-              style={{ position: "absolute", right: "15px", top: "38px", cursor: "pointer", color: "#aaa" }}
+              style={{
+                position: "absolute",
+                right: "15px",
+                top: "38px",
+                cursor: "pointer",
+                color: "#aaa"
+              }}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           </div>
 
-          {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
+          {/* ❌ ERROR */}
+          {error && (
+            <p style={{ color: "red", fontSize: "14px" }}>{error}</p>
+          )}
 
-          <button className='primarybutton' type="submit">
-            {loading ? "Registering..." : "Register"}
+          <button className="primarybutton" type="submit">
+            {loading ? "Logging in..." : "Login"}
           </button>
+
         </form>
 
         <p>
-          Already have an account? <Link to="/login">Login</Link>
+          Don't have an account? <Link to="/register">Register</Link>
         </p>
       </div>
     </main>
   );
 };
 
-export default Register;
+export default Login;

@@ -17,14 +17,17 @@ export async function register({ email, password, username }) {
       success: true,
       data: response.data
     };
+
   } catch (err) {
     console.error("REGISTER ERROR:", err.response?.data);
+
     return {
       success: false,
       message: err.response?.data?.message || "Register failed"
     };
   }
 }
+
 export async function login({ email, password }) {
   try {
     const response = await api.post("/api/auth/login", { email, password });
