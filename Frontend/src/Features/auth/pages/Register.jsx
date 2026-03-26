@@ -6,7 +6,6 @@ import { useAuth } from '../hook/useauth'
 import { Eye, EyeOff } from "lucide-react"
 
 const Register = () => {
-
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -16,20 +15,20 @@ const Register = () => {
   const { loading, handleRegister } = useAuth()
   const navigate = useNavigate()
 
-  // 🔐 Strong Password Regex
+  // 🔐 Strong Password Regex (uppercase, lowercase, number, special char)
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{6,}$/
 
   async function handleSubmit(e) {
     e.preventDefault()
 
-    // ❌ Email validation
+    // ❌ Basic email validation
     if (!email.includes("@")) {
       setError("Invalid email")
       return
     }
 
-    // ❌ Password validation
+    // ❌ Strong password validation
     if (!passwordRegex.test(password)) {
       setError("Password must have uppercase, number & special character")
       return
@@ -38,12 +37,12 @@ const Register = () => {
     setError("")
 
     try {
+      // ✅ Fixed: handleRegister now returns response
       const res = await handleRegister({ username, email, password })
-
       console.log("REGISTER RESPONSE:", res)
 
-      if (!res) {
-        alert("Register failed")
+      if (!res?.success) {
+        setError(res?.message || "Register failed")
         return
       }
 
@@ -82,7 +81,7 @@ const Register = () => {
             <FormGroup
               label="Password"
               placeholder="Enter your password"
-              type={showPassword ? "text" : "password"}  // ✅ FIX
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

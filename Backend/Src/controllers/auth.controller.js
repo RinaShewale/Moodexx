@@ -6,41 +6,42 @@ const redis = require("../config/cache")
 // REGISTER
 async function register(req, res) {
     try {
-        const { username, email, password } = req.body
+        const { username, email, password } = req.body;
 
         const isAlreadyregister = await usermodel.findOne({
             $or: [{ email }, { username }]
-        })
+        });
 
         if (isAlreadyregister) {
             return res.status(400).json({
                 success: false,
                 message: "User already exists"
-            })
+            });
         }
 
-        const hash = await bcrypt.hash(password, 10)
-        const user = await usermodel.create({ username, email, password: hash })
+        const hash = await bcrypt.hash(password, 10);
+        const user = await usermodel.create({ username, email, password: hash });
 
-        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "3d" })
+        const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "3d" });
 
-        // ✅ Proper cookie for cross-origin
+        // ✅ Cookies must be cross-origin ready
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,        // 🔥 must be true for production HTTPS
-            sameSite: "None"     // 🔥 important for frontend hosted on different origin
-        })
+            secure: true,      // HTTPS required
+            sameSite: "None"   // cross-origin
+        });
 
-        // ✅ Fixed response
-        res.status(201).json({
+        // ✅ Send full JSON data properly
+        return res.status(201).json({
             success: true,
             message: "User registered successfully",
             user,
             token
-        })
+        });
 
     } catch (err) {
-        res.status(500).json({ success: false, message: err.message })
+        console.error("REGISTER ERROR:", err.message);
+        return res.status(500).json({ success: false, message: err.message });
     }
 }
 

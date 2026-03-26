@@ -17,14 +17,12 @@ async function uploadsongs(req, res) {
     const tags = id3.read(songbuffer);
     const title = tags.title || "Unknown";
 
-    // 🎯 upload audio
     const songFile = await storageservice.uploadFile({
       buffer: songbuffer,
       filename: title + ".mp3",
       folder: "/cohort2/moodify/song"
     });
 
-    // 🎯 poster (FIXED ✅)
     let posterfile = { url: "" };
 
     if (tags.image && tags.image.imageBuffer) {
@@ -48,14 +46,11 @@ async function uploadsongs(req, res) {
     });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      message: err.message
-    });
+    res.status(500).json({ message: err.message });
   }
 }
 
-// 🎶 GET SONG BY MOOD (RANDOM 🔥)
+// 🎶 GET SONG BY MOOD
 async function getsong(req, res) {
   try {
     const { mood } = req.query;

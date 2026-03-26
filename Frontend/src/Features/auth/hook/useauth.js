@@ -11,27 +11,28 @@ export const useAuth = () => {
     try {
       const data = await register({ username, email, password });
       setUser(data.user);
+      return data; // ✅ Return response to frontend
     } finally {
       setLoading(false);
     }
   }
 
   // Login user
-async function handleLogin({ email, password }) {
-  setLoading(true);
-  try {
-    const res = await login({ email, password });
+  async function handleLogin({ email, password }) {
+    setLoading(true);
+    try {
+      const res = await login({ email, password });
 
-    if (res.success) {
-      setUser(res.data.user);
+      if (res.success) {
+        setUser(res.data.user);
+      }
+
+      return res; // ✅ MUST (nahitar undefined yet hota)
+
+    } finally {
+      setLoading(false);
     }
-
-    return res; // ✅ MUST (nahitar undefined yet hota)
-
-  } finally {
-    setLoading(false);
   }
-}
 
 
   // Get current user from backend
