@@ -5,39 +5,33 @@ import { AuthContext } from "../Auth.context";
 export const useAuth = () => {
   const { user, setUser, loading, setLoading } = useContext(AuthContext);
 
-  // Register new user
+  // ✅ REGISTER new user
   async function handleRegister({ username, email, password }) {
     setLoading(true);
     try {
-      const data = await register({ username, email, password });
-      setUser(data.user);
-      return data; // ✅ Return response to frontend
+      const res = await register({ username, email, password });
+      if (res.success) setUser(res.data.user);
+      return res; // 🔹 MUST return
     } finally {
       setLoading(false);
     }
   }
 
-  // Login user
+  // ✅ LOGIN
   async function handleLogin({ email, password }) {
     setLoading(true);
     try {
       const res = await login({ email, password });
-
-      if (res.success) {
-        setUser(res.data.user);
-      }
-
-      return res; // ✅ MUST (nahitar undefined yet hota)
-
+      if (res.success) setUser(res.data.user);
+      return res; // 🔹 MUST return
     } finally {
       setLoading(false);
     }
   }
 
-
-  // Get current user from backend
+  // ✅ GET CURRENT USER
   async function handleGetMe() {
-    if (user) return; // ✅ Prevent repeated calls if user already exists
+    if (user) return;
     setLoading(true);
     try {
       const data = await getme();
@@ -49,7 +43,7 @@ export const useAuth = () => {
     }
   }
 
-  // Logout
+  // ✅ LOGOUT
   async function handleLogout() {
     setLoading(true);
     try {
@@ -60,10 +54,8 @@ export const useAuth = () => {
     }
   }
 
-  // Load user once on mount
   useEffect(() => {
     handleGetMe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { user, loading, handleRegister, handleLogin, handleGetMe, handleLogout };
