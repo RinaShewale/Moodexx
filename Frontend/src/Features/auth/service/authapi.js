@@ -6,8 +6,26 @@ const api = axios.create({
 });
 
 export async function register({ email, password, username }) {
-  const response = await api.post("/api/auth/register", { email, password, username });
-  return response.data;
+  try {
+    const response = await api.post("/api/auth/register", {
+      email,
+      password,
+      username
+    });
+
+    return {
+      success: true,
+      data: response.data
+    };
+
+  } catch (err) {
+    console.error("REGISTER ERROR:", err.response?.data);
+
+    return {
+      success: false,
+      message: err.response?.data?.message || "Register failed"
+    };
+  }
 }
 
 export async function login({ email, password }) {
