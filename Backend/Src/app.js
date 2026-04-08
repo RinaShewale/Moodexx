@@ -25,7 +25,7 @@ app.use("/api/song", songRouter);
 
 
 
-const frontendPath = path.join(__dirname, "../../Frontend/dist");
+const frontendPath = path.join(process.cwd(), "Frontend/dist");
 app.use(express.static(frontendPath));
 
 app.use((req, res) => {
