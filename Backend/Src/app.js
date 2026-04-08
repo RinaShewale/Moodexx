@@ -25,12 +25,14 @@ app.use("/api/song", songRouter);
 
 
 
-const frontendPath = path.join(process.cwd(), "Frontend/dist");
+const frontendPath = path.join(__dirname, "../../Frontend/dist");
 app.use(express.static(frontendPath));
 
-app.use((req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+
+app.get("*name", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
 });
+
 
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
